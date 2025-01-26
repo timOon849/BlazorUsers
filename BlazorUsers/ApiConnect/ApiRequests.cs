@@ -14,9 +14,9 @@ namespace BlazorUsers.ApiConnect
             _httpClient = httpClient;
         }
 
-        public async Task<UserData> GetAllUsersAsync()
+        public async Task<List<UserDataShort>> GetAllUsersAsync()
         {
-            var url = "api/UsersLogins/getAllUsers";
+            var url = "api/UsersLogins/GetUsers";
 
             try
             {
@@ -28,20 +28,20 @@ namespace BlazorUsers.ApiConnect
                 if (string.IsNullOrEmpty(responseContent))
                 {
                     _logger.LogWarning("Ответ от сервера пуст.");
-                    return new UserData();
+                    return [];
                 }
 
-                var usersData = JsonSerializer.Deserialize<UserData>(responseContent, new JsonSerializerOptions
+                var usersData = JsonSerializer.Deserialize<List<UserDataShort>>(responseContent, new JsonSerializerOptions //
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-                return usersData ?? new UserData();
+                return usersData ?? [];
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Ошибка при запросе");
-                return new UserData();
+                return [];
             }
         }
 

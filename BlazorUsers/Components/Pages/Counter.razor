@@ -11,7 +11,7 @@
             <tr>
                 <th>id_User</th>
                 <th>Name</th>
-                <th>Desc</th>
+                <th>AboutMe</th>
                 <th>Email</th>
                 <th>Password</th>
             </tr>
@@ -86,12 +86,30 @@
     }
 
     private async Task GetUsers()
+{
+    try
     {
-        // var userData = await ApiRequest.GetAllUsersAsync();
-        // users = userData ?? [];
+        // Убедитесь, что ApiRequest не равен null
+        if (ApiRequest == null)
+        {
+            throw new InvalidOperationException("ApiRequest is not initialized.");
+        }
 
-        // StateHasChanged();
+        // Получаем данные от API
+        var userData = await ApiRequest.GetAllUsersAsync();
+
+        // Проверяем, что userData не равен null, иначе создаём пустой список
+        users = userData ?? new List<UserDataShort>();
+
+        // Обновляем состояние компонента
+        StateHasChanged();
     }
+    catch (Exception ex)
+    {
+        // Логируем ошибку или выводим её в консоль
+        Console.WriteLine($"Error in GetUsers: {ex.Message}");
+    }
+}
 
 
     private async void AddNewUser()
